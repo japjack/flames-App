@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FLAMES Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      width: 300px;
+      text-align: center;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #007bff;
+      border: none;
+      color: white;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>FLAMES Calculator</h2>
+    <input type="text" id="name1" placeholder="Enter first name">
+    <input type="text" id="name2" placeholder="Enter second name">
+    <button onclick="calculateFLAMES()">Calculate</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function removeCommonLetters(name1, name2) {
+      let arr1 = name1.toLowerCase().replace(/\s/g, "").split("");
+      let arr2 = name2.toLowerCase().replace(/\s/g, "").split("");
+
+      for (let i = 0; i < arr1.length; i++) {
+        let index = arr2.indexOf(arr1[i]);
+        if (index !== -1) {
+          arr1.splice(i, 1);
+          arr2.splice(index, 1);
+          i--; // adjust after removal
+        }
+      }
+
+      return arr1.length + arr2.length;
+    }
+
+    function flamesResult(count) {
+      let flames = ['F', 'L', 'A', 'M', 'E', 'S'];
+      let index = 0;
+
+      while (flames.length > 1) {
+        index = (index + count - 1) % flames.length;
+        flames.splice(index, 1);
+      }
+
+      return flames[0];
+    }
+
+    function getRelationship(letter) {
+      const map = {
+        'F': 'Friends',
+        'L': 'Love',
+        'A': 'Affection',
+        'M': 'Marriage',
+        'E': 'Enemy',
+        'S': 'Siblings'
+      };
+      return map[letter];
+    }
+
+    function calculateFLAMES() {
+      const name1 = document.getElementById("name1").value.trim();
+      const name2 = document.getElementById("name2").value.trim();
+
+      if (!name1 || !name2) {
+        document.getElementById("result").innerText = "Please enter both names.";
+        return;
+      }
+
+      const count = removeCommonLetters(name1, name2);
+      const letter = flamesResult(count);
+      const relationship = getRelationship(letter);
+
+      document.getElementById("result").innerText = 
+        `Relationship between ${name1} and ${name2} is: ${relationship}`;
+    }
+  </script>
+</body>
+</html>
